@@ -2,8 +2,18 @@ import * as THREE from 'three';
 import { segments, KapitolSegments } from './KapitolSegments';
 import { OutlineEffect } from 'three/addons/effects/OutlineEffect.js';
 import RAPIER from 'https://cdn.skypack.dev/@dimforge/rapier3d-compat';
+import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+import { FontLoader } from 'three/addons/loaders/FontLoader.js';
 
 const kapitolSegments = new KapitolSegments();
+
+function delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+}
+
+while(!kapitolSegments.fontLoaded){
+	await delay(100);
+}
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xA0DCE5);
@@ -79,11 +89,11 @@ RAPIER.init().then(() => {
     world.createCollider(groundColliderDesc);
 
 	// Create the 0 segment
-	segmentsOnBoard.push(new Segment(world, {"x": 0, "y": 0.5, "z":0}));
+	segmentsOnBoard.push(new Segment(world, {"x": 0, "y": 0.5, "z":0}, segments.BABILON));
 	segmentsOnBoard[0].startGravity();
 
 	// Create the 1 segment
-	segmentsOnBoard.push(new Segment(world, spawnPoint));
+	segmentsOnBoard.push(new Segment(world, spawnPoint, segments.BASIC));
     
 	let gameLoop = () => {
 		// Step the simulation forward.  
@@ -106,10 +116,10 @@ function createNewSegment(world: RAPIER.world){
 	segmentID += 1;
 
 	setTimeout(function(){
-		if(segmentID == 3){
+		if(segmentID == 13){
 			segmentsOnBoard.push(new Segment(world, spawnPoint, segments.GREEN));
 		}
-		else if(segmentID == 5){
+		else if(segmentID == 15){
 			segmentsOnBoard.push(new Segment(world, spawnPoint, segments.NAME));
 		}
 		else{
@@ -135,7 +145,8 @@ class Segment{
 
 	constructor (world: RAPIER.World, position:{ x: number; y: number; z: number; }, segment: segments) {
 		this.meshes = kapitolSegments.getSegment(segment);
-		this.meshes.forEach((obj) => {scene.add(obj)}) 
+		console.log("Adding", this.meshes?.length, "meshes")
+		this.meshes?.forEach((obj) => {scene.add(obj)}) 
 
 		 let rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic()
 		 .setTranslation(position.x, position.y, position.z);
@@ -145,6 +156,8 @@ class Segment{
 	
 		let colliderDesc = RAPIER.ColliderDesc.cuboid(4.0, 0.5, 3.0).setDensity(10.0);
 		world.createCollider(colliderDesc, this.rigidbody);
+
+		this.update();
 	}
 
 	startGravity() {
