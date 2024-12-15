@@ -18,20 +18,16 @@ export class Segment {
 		console.log("Adding", this.meshes?.length, "meshes");
 		this.meshes?.forEach((obj) => { scene.add(obj); });
 
-		let rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic()
-			.setTranslation(position.x, position.y, position.z);
-		this.rigidbody = world.createRigidBody(rigidBodyDesc);
+		// TODO: Initialize rigidbody with 0 gravity
 
-		this.rigidbody.setGravityScale(0.0);
-
-		let colliderDesc = RAPIER.ColliderDesc.cuboid(4.0, 0.5, 3.0).setDensity(10.0);
-		world.createCollider(colliderDesc, this.rigidbody);
+		// TODO: Initialize collider
 
 		this.update();
 	}
 
 	startGravity() {
-		this.rigidbody.setGravityScale(1.0);
+		// TODO: Set gravity to neutral state
+
 		this.oscilating = false;
 	}
 
@@ -39,7 +35,8 @@ export class Segment {
 		let pos = this.rigidbody.translation();
 		let rot = this.rigidbody.rotation();
 		if (this.oscilating) {
-			this.rigidbody.setLinvel({ x: 0, y: 0, z: this.oscilatorValue });
+			// TODO: Set velocity on z-axis to this.oscilatorValue
+			
 			if (this.oscialtorDir && this.oscilatorValue < oscilatorBound) {
 				this.oscilatorValue += oscilatorStep;
 			}

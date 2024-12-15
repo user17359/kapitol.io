@@ -57,15 +57,12 @@ renderer.setAnimationLoop(() => {
 
 RAPIER.init().then(() => {
 
-    // Use the RAPIER module here.
-    let gravity = { x: 0.0, y: -9.81, z: 0.0 };
+    // TODO: Initialize gravity  
 
-	world = new RAPIER.World(gravity);
+	// TODO: Create world
 
-    // Create the ground
-    let groundColliderDesc = RAPIER.ColliderDesc.cuboid(20.0, 0.5, 20.0)
-	.setTranslation(0.0, -0.5, 0.0);
-    world.createCollider(groundColliderDesc);
+    // TODO: Create the ground
+ 
 
 	// Create the 0 segment
 	segmentsOnBoard.push(new Segment(world, {"x": 0, "y": 0.5, "z":0}, segments.BABILON, scene));
@@ -75,12 +72,9 @@ RAPIER.init().then(() => {
 	segmentsOnBoard.push(new Segment(world, spawnPoint, segments.BASIC, scene));
     
 	let gameLoop = () => {
-		// Step the simulation forward.  
-		world.step();
-	
+		// TODO: Step the simulation forward and add timeout  
+		
 		segmentsOnBoard.forEach((seg) => {seg.update()}) 
-	
-		setTimeout(gameLoop, 16);
 	};
 
 	gameLoop();
