@@ -1,3 +1,4 @@
+## kapitol.io
 Build your own dormitory in this fun tower building game made for Computer Game Programming :tm: course at uni
 
 Built using:
